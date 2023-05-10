@@ -6,4 +6,16 @@ export default class TeamService {
 
     return teams;
   }
+
+  static async getById(id:number): Promise<Team> {
+    const team = await Team.findOne({
+      where: { id },
+    });
+
+    if (!team) {
+      throw new Error('Team Not Found');
+    }
+
+    return team;
+  }
 }

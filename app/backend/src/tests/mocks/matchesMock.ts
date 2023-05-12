@@ -1,4 +1,4 @@
-[
+export const matchesMock = [
   {
     id: 1,
     homeTeamId: 16,
@@ -27,4 +27,4 @@
       teamName: 'Internacional'
     }
   }
-]
+];

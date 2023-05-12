@@ -1,3 +1,5 @@
-class MatchService {}
+class MatchService {
+
+}
 
 export default MatchService;

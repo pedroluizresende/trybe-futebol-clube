@@ -1,15 +1,20 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import MatchService from '../services/MatchService';
 
 class MatchController {
-  static async getAll(_req:Request, res:Response, next: NextFunction): Promise<void> {
-    try {
-      const matches = await MatchService.getAll();
+  static async getAll(req:Request, res:Response): Promise<void> {
+    const { inProgress } = req.query;
 
-      res.status(200).json(matches);
-    } catch (error) {
-      next(error);
+    let matches;
+    if (inProgress && typeof inProgress === 'string') {
+      console.log(inProgress);
+      matches = await MatchService.matchesFilteredByInProgress(inProgress);
+    } else {
+      // Chame a função que busca todas as partidas no banco de dados
+      matches = await MatchService.getAll();
     }
+
+    res.status(200).json(matches);
   }
 }
 

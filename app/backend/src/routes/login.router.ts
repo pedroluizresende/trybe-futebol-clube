@@ -8,7 +8,7 @@ const loginRouter = Router();
 loginRouter.post('/', validateLoginFields, (req, res, next) =>
   LoginController.login(req, res, next));
 
-loginRouter.get('/role', authMiddleware, (req, res, next) =>
-  LoginController.loginRole(req, res, next));
+loginRouter.get('/role', authMiddleware, (req, res) =>
+  LoginController.loginRole(req, res));
 
 export default loginRouter;

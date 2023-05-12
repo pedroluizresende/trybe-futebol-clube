@@ -15,14 +15,11 @@ class LoginController {
     }
   }
 
-  static loginRole(req: AuthRequest, res: Response, next: NextFunction) {
+  static loginRole(req: AuthRequest, res: Response) {
     const { user } = req;
-    try {
-      if (user) {
-        res.status(200).json({ role: user.role });
-      }
-    } catch (error) {
-      next(error);
+
+    if (user) {
+      res.status(200).json({ role: user.role });
     }
   }
 }

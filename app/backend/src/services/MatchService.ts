@@ -21,6 +21,28 @@ class MatchService {
 
     return matchs;
   }
+
+  static async matchesFilteredByInProgress(inProgress:string):Promise<IMatchWithTeamName[]> {
+    let status;
+
+    if (inProgress === 'true') status = true;
+    if (inProgress === 'false') status = false;
+    const matchs = MatchModel.findAll({
+      where: { inProgress: status },
+      include: [
+        {
+          model: Team,
+          as: 'homeTeam',
+          attributes: { exclude: ['id'] },
+        },
+        { model: Team,
+          as: 'awayTeam',
+          attributes: { exclude: ['id'] },
+        },
+      ],
+    });
+    return matchs;
+  }
 }
 
 export default MatchService;

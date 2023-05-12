@@ -43,7 +43,7 @@ export const matchesMockWhithTeamName = [
     homeTeamGoals: 3,
     awayTeamId: 9,
     awayTeamGoals: 1,
-    inProgress: false,
+    inProgress: true,
     homeTeam: {
       teamName: 'São Paulo'
     },

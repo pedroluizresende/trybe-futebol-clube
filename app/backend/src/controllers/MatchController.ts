@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import MatchService from '../services/MatchService';
 
 class MatchController {
@@ -15,6 +15,16 @@ class MatchController {
     }
 
     res.status(200).json(matches);
+  }
+
+  static async updateInProgres(req:Request, res:Response, next:NextFunction):Promise<void> {
+    const { id } = req.params;
+    try {
+      const response = await MatchService.updateInProgress(Number(id));
+      res.status(200).json({ message: response });
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

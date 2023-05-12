@@ -43,6 +43,14 @@ class MatchService {
     });
     return matchs;
   }
-}
 
+  static async updateInProgress(id: number): Promise<string> {
+    await MatchModel.update(
+      { inProgress: false },
+      { where: { id } },
+    );
+
+    return 'Finished';
+  }
+}
 export default MatchService;

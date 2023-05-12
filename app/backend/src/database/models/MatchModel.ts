@@ -6,9 +6,9 @@ import Team from './TeamModel';
 class MatchModel extends Model implements IMatch {
   declare id: number;
   declare homeTeamId: number;
-  declare homeTeamdGoals: number;
+  declare homeTeamGoals: number;
   declare awayTeamId: number;
-  declare awayTeamdGoals: number;
+  declare awayTeamGoals: number;
   declare inProgress: boolean;
 }
 
@@ -27,7 +27,7 @@ MatchModel.init({
       key: 'id',
     },
   },
-  homeTeamdGoals: {
+  homeTeamGoals: {
     type: INTEGER,
   },
   awayTeamId: {
@@ -38,7 +38,7 @@ MatchModel.init({
       key: 'id',
     },
   },
-  awayTeamdGoals: {
+  awayTeamGoals: {
     type: INTEGER,
   },
   inProgress: {

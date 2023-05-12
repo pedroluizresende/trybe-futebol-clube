@@ -7,7 +7,8 @@ import chaiHttp = require('chai-http');
 import MatchModel from '../database/models/MatchModel'
 
 import { app } from '../app';
-import matchesMock from './mocks/matchesMock';
+import { matchesMock, matchesMockWhithTeamName } from './mocks/matchesMock';
+import exp from 'constants';
 
 chai.use(chaiHttp);
 
@@ -16,6 +17,12 @@ const { expect } = chai;
 describe('Testa a rota /matches', () => { 
   it('deve retornar um array de partidas', async () => {
     sinon.stub(MatchModel, 'findAll').resolves(matchesMock as MatchModel[])
+
+    const response = await chai.request(app)
+    .post('/matches')
+
+    expect(response.status).to.be.equal(200);
+    expect(response.body).to.be.deep.equal(matchesMockWhithTeamName)
   })
   afterEach(() => {
     sinon.restore().

@@ -28,7 +28,7 @@ describe('testa rota /teams', () => {
     expect(response.body).to.be.deep.equal(teams)
   } )
 
-  it('testa se retorna um time, peli id', async () => {
+  it('testa se retorna um time, pelo id', async () => {
     sinon.stub(Team, 'findOne').resolves(teams[0] as Team)
     const response = await chai.request(app).get('/teams/1')
 

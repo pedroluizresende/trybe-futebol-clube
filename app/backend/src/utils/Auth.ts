@@ -1,10 +1,11 @@
 import * as jwt from 'jsonwebtoken';
 import { IUserWithoutPassword } from '../database/interfaces/IUser';
+import User from '../database/models/UserModel';
 
 class Auth {
   private static secretKey = process.env.JWT_SECRET;
   private static configJwt: jwt.SignOptions = {
-    expiresIn: '1m',
+    expiresIn: '1d',
     algorithm: 'HS256',
   };
 
@@ -15,6 +16,20 @@ class Auth {
     const token = jwt.sign(payload, Auth.secretKey, Auth.configJwt);
 
     return token;
+  }
+
+  static validateToken(token:string) {
+    if (Auth.secretKey) {
+      const isValid:string | jwt.JwtPayload | User = jwt.verify(token, Auth.secretKey) as User;
+      const user = {
+        id: isValid.id,
+        username: isValid.username,
+        role: isValid.role,
+        email: isValid.email,
+      };
+
+      return user;
+    }
   }
 }
 

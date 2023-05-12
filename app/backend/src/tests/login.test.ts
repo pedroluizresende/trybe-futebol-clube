@@ -40,6 +40,7 @@ describe('testa a rota /login', () => {
   });
   it('ao informar email e password válidos retorna um token', async () => {
     sinon.stub(User, 'findOne').resolves(User.build(mockUser));
+    console.log('console.log:',User.build(mockUser))
     sinon.stub(Auth, 'generateToken').resolves('token')
     const response = await chai.request(app).post('/login').send({
       email: mockUser.email,

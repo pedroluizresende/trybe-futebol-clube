@@ -18,4 +18,10 @@ matchesRouter.patch(
   (req, res, next) => MatchController.updateInProgres(req, res, next),
 );
 
+matchesRouter.post(
+  '/',
+  authMiddleware,
+  (req, res, next) => MatchController.create(req, res, next),
+);
+
 export default matchesRouter;

@@ -1,6 +1,6 @@
 import NotFoundException from '../exceptions/NotFoundException';
 import MatchModel from '../database/models/MatchModel';
-import { IMatchWithTeamName } from '../database/interfaces/IMatch';
+import IMatch, { IMatchWithTeamName, INewMatch } from '../database/interfaces/IMatch';
 import Team from '../database/models/TeamModel';
 
 class MatchService {
@@ -53,7 +53,7 @@ class MatchService {
     return 'Finished';
   }
 
-  static async findById(id:number): Promise<IMatchWithTeamName | null> {
+  static async findById(id:number): Promise<IMatchWithTeamName> {
     const match = await MatchModel.findOne({
       include: [
         {
@@ -68,6 +68,8 @@ class MatchService {
       ],
       where: { id },
     });
+
+    if (!match) throw new NotFoundException('match not found');
     return match;
   }
 
@@ -86,6 +88,25 @@ class MatchService {
       throw new NotFoundException('Match Not Found');
     }
     return updatedMatch.id;
+  }
+
+  static async create(newMatch: INewMatch): Promise<IMatch> {
+    const { homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals } = newMatch;
+    const { id } = await MatchModel.create({
+      homeTeamId,
+      homeTeamGoals,
+      awayTeamId,
+      awayTeamGoals,
+      inProgress: true,
+    });
+    return {
+      id,
+      homeTeamId,
+      homeTeamGoals,
+      awayTeamId,
+      awayTeamGoals,
+      inProgress: true,
+    };
   }
 }
 export default MatchService;

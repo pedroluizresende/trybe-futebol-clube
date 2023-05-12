@@ -7,7 +7,7 @@ import chaiHttp = require('chai-http');
 import MatchModel from '../database/models/MatchModel'
 
 import { app } from '../app';
-import { matchesMock, matchesMockWhithTeamName } from './mocks/matchesMock';
+import { matchesMock, matchesMockWhithTeamName, newMatch } from './mocks/matchesMock';
 import Auth from '../utils/Auth';
 import IUser, { IUserWithoutPassword } from '../database/interfaces/IUser';
 
@@ -133,6 +133,44 @@ describe('Testa a rota /matches', () => {
 
       expect(response.status).to.be.equal(200);
       expect(response.body).to.be.deep.equal({updatedId: 2})
+    })
+    afterEach(() => {
+      sinon.restore();
+    })
+  })
+  describe('testa a rota "POST /matches"', () => {
+    it('retorna erro ao não informar token', async() => {
+      
+      const response = await chai.request(app)
+      .post('/matches')
+
+      expect(response.status).to.be.equal(401);
+      expect(response.body).to.be.deep.equal(tokenNotFoundMessage)
+    })
+
+    it('retorna erro ao informar token inválido', async () => {
+
+      const {email, password } = userAdmin 
+      await chai.request(app).post('/login').send({email, password});
+      const response = await chai.request(app)
+      .post('/matches')
+      .set('Authorization', 'tokenInvalido')
+
+      expect(response.status).to.be.equal(401);
+      expect(response.body).to.be.deep.equal(tokenInvalidMessage)
+    })
+    it('retornar a nova partida ao cadastrar com sucesso', async () => {
+      sinon.stub(MatchModel, 'create').resolves({id: 1, ...newMatch, inProgress: true} as MatchModel)
+      const {email, password } = userAdmin 
+      const login = await chai.request(app).post('/login').send({email, password});
+      const { token } = login.body
+      const response = await chai.request(app)
+      .post('/matches')
+      .send(newMatch)
+      .set('Authorization', token)
+
+      expect(response.status).to.be.equal(201);
+      expect(response.body).to.be.deep.equal({id: 1, ...newMatch, inProgress: true})
     })
     afterEach(() => {
       sinon.restore();

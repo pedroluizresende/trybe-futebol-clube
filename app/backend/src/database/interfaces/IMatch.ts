@@ -1,9 +1,12 @@
-interface IMatch {
-  id: number;
+export interface INewMatch {
   homeTeamId: number;
   homeTeamGoals: number;
   awayTeamId: number;
   awayTeamGoals: number;
+}
+
+interface IMatch extends INewMatch{
+  id: number;
   inProgress: boolean;
 }
 

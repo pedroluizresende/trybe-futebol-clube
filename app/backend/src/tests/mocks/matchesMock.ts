@@ -1,5 +1,5 @@
 import { match } from "assert";
-import IMatch from "../../database/interfaces/IMatch";
+import IMatch ,{INewMatch} from "../../database/interfaces/IMatch";
 import MatchModel from "../../database/models/MatchModel";
 
 
@@ -52,3 +52,10 @@ export const matchesMockWhithTeamName = [
     }
   },
 ];
+
+export const newMatch: INewMatch = {
+    homeTeamId: 16,
+    homeTeamGoals: 8,
+    awayTeamId: 2,
+    awayTeamGoals: 2,
+}

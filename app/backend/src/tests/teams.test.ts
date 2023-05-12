@@ -21,7 +21,7 @@ const teams = [
 describe('testa rota /teams', () => {
 
   it('testa se retorna array de times, com status duzentos', async () => {
-    sinon.stub(TeamService, 'getAll').resolves(teams as Team[])
+    sinon.stub(Team, 'findAll').resolves(teams as Team[])
     const response = await chai.request(app).get('/teams')
 
     expect(response.status).to.be.equal(200)
@@ -29,7 +29,7 @@ describe('testa rota /teams', () => {
   } )
 
   it('testa se retorna um time, peli id', async () => {
-    sinon.stub(TeamService, 'getById').resolves(teams[0] as Team)
+    sinon.stub(Team, 'findOne').resolves(teams[0] as Team)
     const response = await chai.request(app).get('/teams/1')
 
     expect(response.status).to.be.equal(200)

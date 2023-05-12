@@ -1,3 +1,4 @@
+import NotFoundException from '../exceptions/NotFoundException';
 import MatchModel from '../database/models/MatchModel';
 import { IMatchWithTeamName } from '../database/interfaces/IMatch';
 import Team from '../database/models/TeamModel';
@@ -75,8 +76,6 @@ class MatchService {
     homeTeamGoals:number,
     awayTeamGoals:number,
   ): Promise<number> {
-    console.log(await MatchModel.findOne({ where: { id } }));
-
     await MatchModel.update(
       { homeTeamGoals, awayTeamGoals },
       { where: { id } },
@@ -84,7 +83,7 @@ class MatchService {
 
     const updatedMatch = await MatchService.findById(id);
     if (!updatedMatch) {
-      throw new Error('Match Not Found');
+      throw new NotFoundException('Match Not Found');
     }
     return updatedMatch.id;
   }

@@ -100,5 +100,45 @@ describe('Testa a rota /matches', () => {
       sinon.restore();
     })
   })
-  des
- })
+  describe.only('testa a rota "matches/:id"', () => {
+    it('retorna erro ao não informar token', async() => {
+      
+      const response = await chai.request(app)
+      .patch('/matches/1')
+
+      expect(response.status).to.be.equal(401);
+      expect(response.body).to.be.deep.equal(tokenNotFoundMessage)
+    })
+
+    it('retorna erro ao informar token inválido', async () => {
+
+      const {email, password } = userAdmin 
+      await chai.request(app).post('/login').send({email, password});
+      const response = await chai.request(app)
+      .patch('/matches/1')
+      .set('Authorization', 'tokenInvalido')
+
+      expect(response.status).to.be.equal(401);
+      expect(response.body).to.be.deep.equal(tokenInvalidMessage)
+    })
+    it('retorna mensagem de sucesso ao atualizar', async () => {
+      sinon.stub(MatchModel, 'update').resolves()
+      sinon.stub(MatchModel, 'findOne').resolves(matchesMockWhithTeamName[1] as MatchModel)
+      const {email, password } = userAdmin 
+      const login = await chai.request(app).post('/login').send({email, password});
+      const { token } = login.body
+      const response = await chai.request(app)
+      .patch('/matches/2')
+      .send({ homeTeamGoals: 3, awayTeamGoals: 2 })
+      .set('Authorization', token)
+
+      expect(response.status).to.be.equal(200);
+      expect(response.body).to.be.deep.equal({
+        ...matchesMockWhithTeamName[1],
+      })
+    })
+    afterEach(() => {
+      sinon.restore();
+    })
+  })
+ }) 

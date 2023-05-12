@@ -1,4 +1,3 @@
-// import Team from '../database/models/TeamModel';
 import MatchModel from '../database/models/MatchModel';
 import { IMatchWithTeamName } from '../database/interfaces/IMatch';
 import Team from '../database/models/TeamModel';
@@ -51,6 +50,40 @@ class MatchService {
     );
 
     return 'Finished';
+  }
+
+  static async findById(id:number): Promise<IMatchWithTeamName | null> {
+    const match = await MatchModel.findOne({
+      include: [
+        {
+          model: Team,
+          as: 'homeTeam',
+          attributes: { exclude: ['id'] },
+        },
+        { model: Team,
+          as: 'awayTeam',
+          attributes: { exclude: ['id'] },
+        },
+      ],
+      where: { id },
+    });
+    return match;
+  }
+
+  static async update(
+    id:number,
+    homeTeamGoals:number,
+    awayTeamGoals:number,
+  ): Promise<IMatchWithTeamName | null> {
+    console.log(await MatchModel.findOne({ where: { id } }));
+
+    await MatchModel.update(
+      { homeTeamGoals, awayTeamGoals },
+      { where: { id } },
+    );
+
+    const updatedMatch = MatchService.findById(id);
+    return updatedMatch;
   }
 }
 export default MatchService;

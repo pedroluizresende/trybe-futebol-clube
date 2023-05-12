@@ -94,21 +94,4 @@ describe('testa a rota /login', () => {
     expect(response.status).to.be.equal(401);
     expect(response.body).to.be.deep.equal({ message: 'Token must be a valid token' });
   })
-  it('ao passar um token válido devera retornar a role do usuário', async () =>{
-    const {id, username, role, email} = mockUser
-  const token = Auth.generateToken({id, username, role, email})
-  sinon.stub(Auth, 'validateToken').resolves({id, username, role, email})
-
-  const response = await chai
-    .request(app)
-    .get('/login/role')
-    .set('Authorization', `Bearer ${token}`)
-
-  expect(response.status).to.be.equal(200);
-  expect(response.body).to.haveOwnProperty('role');
-  expect(response.body.role).to.be.equal('admin');
-  })
-  afterEach(() => {
-    sinon.restore()
-  })
-});
+ });

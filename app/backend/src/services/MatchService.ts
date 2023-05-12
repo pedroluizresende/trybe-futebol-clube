@@ -74,7 +74,7 @@ class MatchService {
     id:number,
     homeTeamGoals:number,
     awayTeamGoals:number,
-  ): Promise<IMatchWithTeamName | null> {
+  ): Promise<number> {
     console.log(await MatchModel.findOne({ where: { id } }));
 
     await MatchModel.update(
@@ -82,8 +82,11 @@ class MatchService {
       { where: { id } },
     );
 
-    const updatedMatch = MatchService.findById(id);
-    return updatedMatch;
+    const updatedMatch = await MatchService.findById(id);
+    if (!updatedMatch) {
+      throw new Error('Match Not Found');
+    }
+    return updatedMatch.id;
   }
 }
 export default MatchService;

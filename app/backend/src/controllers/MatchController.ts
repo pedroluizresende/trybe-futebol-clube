@@ -33,7 +33,7 @@ class MatchController {
 
     try {
       const response = await MatchService.update(Number(id), homeTeamGoals, awayTeamGoals);
-      res.status(200).json({ message: response });
+      res.status(200).json({ updatedId: response });
     } catch (error) {
       next(error);
     }

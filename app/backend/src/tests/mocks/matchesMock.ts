@@ -16,7 +16,7 @@ export const matchesMock: IMatch[] = [
     id: 2,
     homeTeamId: 2,
     homeTeamGoals: 3,
-    awayTeamId: 1,
+    awayTeamId: 9,
     awayTeamGoals: 1,
     inProgress: false
   },

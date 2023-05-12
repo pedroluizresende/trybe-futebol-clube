@@ -10,6 +10,25 @@ class MatchModel extends Model implements IMatch {
   declare awayTeamId: number;
   declare awayTeamGoals: number;
   declare inProgress: boolean;
+  declare homeTeam: Team;
+  declare awayTeam: Team;
+
+  static async getAll() {
+    return this.findAll({
+      include: [
+        {
+          model: Team,
+          as: 'homeTeam',
+          attributes: ['teamName'],
+        },
+        {
+          model: Team,
+          as: 'awayTeam',
+          attributes: ['teamName'],
+        },
+      ],
+    });
+  }
 }
 
 MatchModel.init({
@@ -47,15 +66,15 @@ MatchModel.init({
   },
 }, {
   sequelize: db,
-  modelName: 'teams',
+  modelName: 'matches',
   timestamps: false,
   underscored: true,
 });
 
-MatchModel.hasOne(Team, { foreignKey: 'id', as: 'homeTeam' });
-MatchModel.hasOne(Team, { foreignKey: 'id', as: 'awayTeam' });
+MatchModel.belongsTo(Team, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+MatchModel.belongsTo(Team, { foreignKey: 'awayTeamId', as: 'awayTeam' });
 
-Team.hasMany(MatchModel, { foreignKey: 'homeTeamId', as: 'away matches' });
-Team.hasMany(MatchModel, { foreignKey: 'awayTeamId', as: 'home matches' });
+Team.hasMany(MatchModel, { foreignKey: 'homeTeamId', as: 'homeMatches' });
+Team.hasMany(MatchModel, { foreignKey: 'awayTeamId', as: 'awayMatches' });
 
 export default MatchModel;

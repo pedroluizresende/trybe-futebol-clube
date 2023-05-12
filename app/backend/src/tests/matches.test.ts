@@ -15,10 +15,10 @@ const { expect } = chai;
 
 describe('Testa a rota /matches', () => { 
   it('deve retornar um array de partidas', async () => {
-    sinon.stub(MatchModel, 'findAll').resolves(matchesMock as MatchModel[])
+    sinon.stub(MatchModel, 'findAll').resolves(matchesMockWhithTeamName as MatchModel[])
 
     const response = await chai.request(app)
-    .post('/matches')
+    .get('/matches')
 
     expect(response.status).to.be.equal(200);
     expect(response.body).to.be.deep.equal(matchesMockWhithTeamName)

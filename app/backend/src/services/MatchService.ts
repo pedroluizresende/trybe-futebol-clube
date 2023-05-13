@@ -1,7 +1,9 @@
+import UnprocessingException from '../exceptions/UnprocessingException';
 import NotFoundException from '../exceptions/NotFoundException';
 import MatchModel from '../database/models/MatchModel';
 import IMatch, { IMatchWithTeamName, INewMatch } from '../database/interfaces/IMatch';
 import Team from '../database/models/TeamModel';
+import TeamService from './TeamService';
 
 class MatchService {
   static async getAll(): Promise<IMatchWithTeamName[]> {
@@ -90,8 +92,25 @@ class MatchService {
     return updatedMatch.id;
   }
 
+  private static async verifyIds(homeTeamId: number, awayTeamId: number):Promise<void> {
+    if (homeTeamId === awayTeamId) {
+      throw new UnprocessingException('It is not possible to create a match with two equal teams');
+    }
+    const homeTeam = await TeamService.getById(homeTeamId);
+    console.log(homeTeam);
+    const awayTeam = await TeamService.getById(awayTeamId);
+    console.log(awayTeam);
+
+    if (!homeTeam || !awayTeam) {
+      throw new NotFoundException('There is no team with such id!');
+    }
+  }
+
   static async create(newMatch: INewMatch): Promise<IMatch> {
     const { homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals } = newMatch;
+
+    await MatchService.verifyIds(homeTeamId, awayTeamId);
+
     const { id } = await MatchModel.create({
       homeTeamId,
       homeTeamGoals,

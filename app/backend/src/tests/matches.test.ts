@@ -10,6 +10,8 @@ import { app } from '../app';
 import { matchesMock, matchesMockWhithTeamName, newMatch } from './mocks/matchesMock';
 import Auth from '../utils/Auth';
 import IUser, { IUserWithoutPassword } from '../database/interfaces/IUser';
+import { INewMatch } from '../database/interfaces/IMatch';
+import Team from '../database/models/TeamModel';
 
 chai.use(chaiHttp);
 
@@ -171,6 +173,46 @@ describe('Testa a rota /matches', () => {
 
       expect(response.status).to.be.equal(201);
       expect(response.body).to.be.deep.equal({id: 1, ...newMatch, inProgress: true})
+    })
+    it('ao passar dois times iguais deve retornar um erro', async ()=> {
+
+      const {email, password } = userAdmin 
+      const login = await chai.request(app).post('/login').send({email, password});
+      const {token} = login.body;
+
+      const response = await chai.request(app)
+      .post('/matches')
+      .send({
+        homeTeamId: 1,
+        awayTeamId: 1,
+        homeTeamGoals: 1,
+        awayTeamGoals: 1,
+      } as INewMatch)
+      .set('Authorization', token)
+
+      expect(response.status).to.be.equal(422)
+      expect(response.body).to.be.deep.equal({message: 'It is not possible to create a match with two equal teams'})
+
+    })
+    it('ao passar ids de times que não existem, deve retornar erro', async () => {
+      sinon.stub(Team, 'findOne').onCall(0).resolves().onCall(1).resolves()
+      const {email, password } = userAdmin 
+      const login = await chai.request(app).post('/login').send({email, password});
+      const {token} = login.body;
+
+      const response = await chai.request(app)
+      .post('/matches')
+      .send({
+        homeTeamId: 999,
+        awayTeamId: 1,
+        homeTeamGoals: 1,
+        awayTeamGoals: 1,
+      } as INewMatch)
+      .set('Authorization', token)
+
+      expect(response.status).to.be.equal(404)
+      expect(response.body).to.be.deep.equal({message: 'There is no team with such id!'})
+
     })
     afterEach(() => {
       sinon.restore();

@@ -1,13 +1,13 @@
-# :construction: README customizado em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto no qual você pode customizar e reutilizar todas as vezes que for executar o trybe-publisher.
+# Boas vindas ao repositório do Trybe Futebol Clube!
 
-Para deixá-lo com a sua cara, basta alterar o seguinte arquivo da sua máquina: ~/.student-repo-publisher/custom/_NEW_README.md
+Here you can find the development details of this project, both its backend and frontend
 
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+ `TFC` is an informational website about football matches and rankings!⚽️
+ 
+ where you can access it through this link [https://www.google.com](https://www.google.com)
+
+
+
+  Nesse projeto, foi construido **um back-end dockerizado utilizando modelagem de dados através do Sequelize**. Seu desenvolvimento  **respeitou regras de negócio** providas no projeto e **a API é capaz de ser consumida por um front-end já provido peloa Trybe**.
+
+  Para adicionar uma partida é necessário ter um _token_, portanto a pessoa deverá estar logada para fazer as alterações. 

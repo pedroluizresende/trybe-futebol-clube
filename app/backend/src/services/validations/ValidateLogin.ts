@@ -11,7 +11,7 @@ class ValidateLogin {
   private static validatePassword(password:string):void {
     const { error } = Joi.string().min(6).validate(password);
 
-    if (error) throw new InvalidLoginException('Invalid email or password');
+    if (error) throw new InvalidLoginException();
   }
 
   static validateAllFields(email:string, password: string):void {

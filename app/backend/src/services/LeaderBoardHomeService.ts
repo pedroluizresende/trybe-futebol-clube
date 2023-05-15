@@ -52,19 +52,57 @@ class LeaderboardHomeService {
     return victoriesPoints + drawsPoinst;
   }
 
+  private static async calculateGoalsBalance(teamId: number):Promise<number> {
+    const goalsFavor = await LeaderboardHomeService.getGoalFavor(teamId);
+    const goalsOwn = await LeaderboardHomeService.getGoalsOwn(teamId);
+    return goalsFavor - goalsOwn;
+  }
+
+  private static async calculateEficiency(teamId:number): Promise<number> {
+    const games = (await LeaderboardHomeService.getMatches(teamId)).length;
+    const points = await LeaderboardHomeService.getTotalPoints(teamId);
+    const totalPossiblePoints = games * 3;
+    const efficiency = (points / totalPossiblePoints) * 100;
+
+    return parseFloat(efficiency.toFixed(2));
+  }
+
+  private static sortLeaderboard(leaderboard: ITeamLeaderboard[]): ITeamLeaderboard[] {
+    const sortedLeaderboard = leaderboard.sort((a, b) => {
+      if (b.totalPoints === a.totalPoints) {
+        if (b.totalVictories === a.totalVictories) {
+          if (b.goalsBalance === a.goalsBalance) {
+            return b.goalsFavor - a.goalsFavor;
+          }
+          return b.goalsBalance - a.goalsBalance;
+        }
+        return b.totalVictories - a.totalVictories;
+      }
+      return b.totalPoints - a.totalPoints;
+    });
+
+    return sortedLeaderboard;
+  }
+
   static async getLeaderBoard(): Promise<ITeamLeaderboard[]> {
     const teams = await LeaderboardHomeService.getTeams();
-    const response = Promise.all(teams.map(async (team) => ({
-      name: team.teamName,
-      totalPoints: await LeaderboardHomeService.getTotalPoints(team.id),
-      totalGames: (await LeaderboardHomeService.getMatches(team.id)).length,
-      totalVictories: await LeaderboardHomeService.getTotalVictories(team.id),
-      totalDraws: await LeaderboardHomeService.getTotalDraws(team.id),
-      totalLosses: await LeaderboardHomeService.getTotalLosses(team.id),
-      goalsFavor: await LeaderboardHomeService.getGoalFavor(team.id),
-      goalsOwn: await LeaderboardHomeService.getGoalsOwn(team.id),
-    })));
-    return response;
+    const response = await Promise.all(
+      teams.map(async (team) => ({
+        name: team.teamName,
+        totalPoints: await LeaderboardHomeService.getTotalPoints(team.id),
+        totalGames: (await LeaderboardHomeService.getMatches(team.id)).length,
+        totalVictories: await LeaderboardHomeService.getTotalVictories(team.id),
+        totalDraws: await LeaderboardHomeService.getTotalDraws(team.id),
+        totalLosses: await LeaderboardHomeService.getTotalLosses(team.id),
+        goalsFavor: await LeaderboardHomeService.getGoalFavor(team.id),
+        goalsOwn: await LeaderboardHomeService.getGoalsOwn(team.id),
+        goalsBalance: await LeaderboardHomeService.calculateGoalsBalance(team.id),
+        efficiency: await LeaderboardHomeService.calculateEficiency(team.id),
+      })),
+    );
+
+    const sortedLeaderboard = LeaderboardHomeService.sortLeaderboard(response);
+    return sortedLeaderboard;
   }
 }
 

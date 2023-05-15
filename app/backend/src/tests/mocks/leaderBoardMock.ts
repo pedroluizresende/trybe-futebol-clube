@@ -33,5 +33,7 @@ export const leaderBoardMock: ITeamLeaderboard[] = [{
   totalLosses: 0,
   goalsFavor: 4,
   goalsOwn: 1,
+  goalsBalance: 3,
+  efficiency: 100,
 }
 ]

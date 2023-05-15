@@ -4,7 +4,7 @@ import * as bcrypt from 'bcryptjs'
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import { app } from '../app';
-import { leaderBoardMock, leaderBoardMock2, leaderBoardMock3, matchMock, teamsMock, teamsMock2 } from './mocks/leaderBoardMock';
+import { leaderBoardMock, leaderBoardMock2, leaderBoardMock3, matchMock, matchMock2, teamsMock, teamsMock2 } from './mocks/leaderBoardMock';
 import Team from '../database/models/TeamModel';
 import MatchModel from '../database/models/MatchModel';
 
@@ -46,7 +46,7 @@ describe('testa a rota "/leaderboard"', () => {
   describe('no endpoint "GET /leaderboard"', () => {
     it('deverá retornar array com todos os times e seus dados', async () => {
       sinon.stub(Team, 'findAll').resolves(teamsMock as Team[])
-      sinon.stub(MatchModel, 'findAll').resolves(matchMock as MatchModel[])
+      sinon.stub(MatchModel, 'findAll').resolves(matchMock2 as MatchModel[])
      
       const response = await chai.request(app)
       .get('/leaderBoard')

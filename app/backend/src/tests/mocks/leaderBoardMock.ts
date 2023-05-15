@@ -31,17 +31,36 @@ export const matchMock: IMatch[] = [
 },
 ]
 
+export const matchMock2: IMatch[] = [
+  {
+    id: 1,
+    homeTeamId: 1,
+    homeTeamGoals: 4,
+    awayTeamId: 2,
+    awayTeamGoals: 1,
+    inProgress: false
+  },
+  {
+    id: 2,
+    homeTeamId: 2,
+    homeTeamGoals: 1,
+    awayTeamId: 1,
+    awayTeamGoals: 4,
+    inProgress: false
+  },
+]
+
 export const leaderBoardMock: ITeamLeaderboard[] = [{
   name: 'Palmeiras',
   totalPoints: 3,
-  totalGames: 1,
+  totalGames: 2,
   totalVictories: 1,
   totalDraws: 0,
-  totalLosses: 0,
-  goalsFavor: 4,
-  goalsOwn: 1,
-  goalsBalance: 3,
-  efficiency: 100,
+  totalLosses: 1,
+  goalsFavor: 5,
+  goalsOwn: 5,
+  goalsBalance: 0,
+  efficiency: 50,
 }
 ]
 
@@ -61,13 +80,13 @@ export const leaderBoardMock2: ITeamLeaderboard[] = [{
 
 export const leaderBoardMock3: ITeamLeaderboard[] = [{
   name: 'Palmeiras',
-  totalPoints: 6,
-  totalGames: 2,
-  totalVictories: 2,
+  totalPoints: 12,
+  totalGames: 4,
+  totalVictories: 4,
   totalDraws: 0,
   totalLosses: 0,
-  goalsFavor: 8,
-  goalsOwn: 2,
-  goalsBalance: 6,
+  goalsFavor: 16,
+  goalsOwn: 4,
+  goalsBalance: 12,
   efficiency: 100,
 }]

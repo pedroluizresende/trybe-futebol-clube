@@ -13,6 +13,13 @@ export const teamsMock: ITeam[] = [
  },
 ]
 
+export const teamsMock2: ITeam[] = [
+  {
+   id: 2,
+   teamName: 'Grêmio',
+  },
+ ]
+
 export const matchMock: IMatch[] = [
   {
   id: 1,
@@ -37,3 +44,30 @@ export const leaderBoardMock: ITeamLeaderboard[] = [{
   efficiency: 100,
 }
 ]
+
+export const leaderBoardMock2: ITeamLeaderboard[] = [{
+  name: 'Grêmio',
+  totalPoints: 0,
+  totalGames: 1,
+  totalVictories: 0,
+  totalDraws: 0,
+  totalLosses: 1,
+  goalsFavor: 1,
+  goalsOwn: 4,
+  goalsBalance: -3,
+  efficiency: 0,
+}
+]
+
+export const leaderBoardMock3: ITeamLeaderboard[] = [{
+  name: 'Palmeiras',
+  totalPoints: 6,
+  totalGames: 2,
+  totalVictories: 2,
+  totalDraws: 0,
+  totalLosses: 0,
+  goalsFavor: 8,
+  goalsOwn: 2,
+  goalsBalance: 6,
+  efficiency: 100,
+}]

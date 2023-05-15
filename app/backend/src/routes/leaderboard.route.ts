@@ -3,6 +3,9 @@ import LeaderboardController from '../controllers/LeaderboardController';
 
 const leaderBorderRoute = Router();
 
+leaderBorderRoute.get('/', (req, res, next) =>
+  LeaderboardController.getLeaderBoard(req, res, next));
+
 leaderBorderRoute.get('/home', (req, res, next) =>
   LeaderboardController.getHomeLeaderBoard(req, res, next));
 

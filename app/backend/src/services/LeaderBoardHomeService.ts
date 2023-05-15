@@ -9,7 +9,7 @@ class LeaderboardHomeService {
 
   private static async getMatches(homeTeamId:number): Promise<MatchModel[]> {
     const matches = await MatchModel.findAll({
-      where: { homeTeamId },
+      where: { homeTeamId, inProgress: false },
     });
 
     return matches;

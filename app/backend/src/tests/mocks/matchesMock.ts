@@ -53,6 +53,16 @@ export const matchesMockWhithTeamName = [
   },
 ];
 
+export const mockedTeam1 = {
+  id: 16,
+  teamName: 'São Paulo'
+}
+
+export const mockedTeam2 = {
+  id: 2,
+  teamName: 'Bahia'
+}
+
 export const newMatch: INewMatch = {
     homeTeamId: 16,
     homeTeamGoals: 8,

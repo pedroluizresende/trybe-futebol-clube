@@ -7,11 +7,12 @@ import chaiHttp = require('chai-http');
 import MatchModel from '../database/models/MatchModel'
 
 import { app } from '../app';
-import { matchesMock, matchesMockWhithTeamName, newMatch } from './mocks/matchesMock';
+import { matchesMock, matchesMockWhithTeamName, mockedTeam1, mockedTeam2, newMatch } from './mocks/matchesMock';
 import Auth from '../utils/Auth';
 import IUser, { IUserWithoutPassword } from '../database/interfaces/IUser';
 import { INewMatch } from '../database/interfaces/IMatch';
 import Team from '../database/models/TeamModel';
+import User from '../database/models/UserModel';
 
 chai.use(chaiHttp);
 
@@ -25,6 +26,14 @@ const userAdmin: IUser = {
   role: 'admin',
   email: 'admin@admin.com',
   password: 'secret_admin'
+}
+
+const mockUser = {
+  id: 1,
+  username: 'admin',
+  role: 'admin',
+  email: 'admin@admin.com',
+  password: bcrypt.hashSync('secret_admin', 10)
 }
 
 const tokenInvalidMessage = { message: 'Token must be a valid token' }
@@ -75,9 +84,11 @@ describe('Testa a rota /matches', () => {
       expect(response.body).to.be.deep.equal(tokenNotFoundMessage)
     })
     it('retorna erro ao informar token inválido', async () => {
+      sinon.stub(User, 'findOne').resolves(User.build(mockUser));
 
       const {email, password } = userAdmin 
       await chai.request(app).post('/login').send({email, password});
+
       const response = await chai.request(app)
       .patch('/matches/1/finish')
       .set('Authorization', 'tokenInvalido')
@@ -86,7 +97,9 @@ describe('Testa a rota /matches', () => {
       expect(response.body).to.be.deep.equal(tokenInvalidMessage)
     })
     it('retorna mensagem de sucesso ao atualizar', async () => {
+      sinon.stub(User, 'findOne').resolves(User.build(mockUser));
       sinon.stub(MatchModel, 'update').resolves()
+
       const {email, password } = userAdmin 
       const login = await chai.request(app).post('/login').send({email, password});
       const { token } = login.body
@@ -112,6 +125,7 @@ describe('Testa a rota /matches', () => {
     })
 
     it('retorna erro ao informar token inválido', async () => {
+      sinon.stub(User, 'findOne').resolves(User.build(mockUser));
 
       const {email, password } = userAdmin 
       await chai.request(app).post('/login').send({email, password});
@@ -123,6 +137,7 @@ describe('Testa a rota /matches', () => {
       expect(response.body).to.be.deep.equal(tokenInvalidMessage)
     })
     it('retorna mensagem de sucesso ao atualizar', async () => {
+      sinon.stub(User, 'findOne').resolves(User.build(mockUser));
       sinon.stub(MatchModel, 'update').resolves()
       sinon.stub(MatchModel, 'findOne').resolves(matchesMockWhithTeamName[1] as MatchModel)
       const {email, password } = userAdmin 
@@ -151,7 +166,7 @@ describe('Testa a rota /matches', () => {
     })
 
     it('retorna erro ao informar token inválido', async () => {
-
+      sinon.stub(User, 'findOne').resolves(User.build(mockUser));
       const {email, password } = userAdmin 
       await chai.request(app).post('/login').send({email, password});
       const response = await chai.request(app)
@@ -162,7 +177,10 @@ describe('Testa a rota /matches', () => {
       expect(response.body).to.be.deep.equal(tokenInvalidMessage)
     })
     it('retornar a nova partida ao cadastrar com sucesso', async () => {
+      sinon.stub(User, 'findOne').resolves(User.build(mockUser));
       sinon.stub(MatchModel, 'create').resolves({id: 1, ...newMatch, inProgress: true} as MatchModel)
+      sinon.stub(Team, 'findOne')
+      .onCall(0).resolves(mockedTeam1 as Team).onCall(1).resolves(mockedTeam2 as Team)
       const {email, password } = userAdmin 
       const login = await chai.request(app).post('/login').send({email, password});
       const { token } = login.body
@@ -175,7 +193,7 @@ describe('Testa a rota /matches', () => {
       expect(response.body).to.be.deep.equal({id: 1, ...newMatch, inProgress: true})
     })
     it('ao passar dois times iguais deve retornar um erro', async ()=> {
-
+      sinon.stub(User, 'findOne').resolves(User.build(mockUser));
       const {email, password } = userAdmin 
       const login = await chai.request(app).post('/login').send({email, password});
       const {token} = login.body;
@@ -195,6 +213,7 @@ describe('Testa a rota /matches', () => {
 
     })
     it('ao passar ids de times que não existem, deve retornar erro', async () => {
+      sinon.stub(User, 'findOne').resolves(User.build(mockUser));
       sinon.stub(Team, 'findOne').onCall(0).resolves().onCall(1).resolves()
       const {email, password } = userAdmin 
       const login = await chai.request(app).post('/login').send({email, password});

@@ -97,9 +97,7 @@ class MatchService {
       throw new UnprocessingException('It is not possible to create a match with two equal teams');
     }
     const homeTeam = await TeamService.getById(homeTeamId);
-    console.log(homeTeam);
     const awayTeam = await TeamService.getById(awayTeamId);
-    console.log(awayTeam);
 
     if (!homeTeam || !awayTeam) {
       throw new NotFoundException('There is no team with such id!');

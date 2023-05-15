@@ -44,7 +44,7 @@ describe('testa a rota "/leaderboard"', () => {
     })
   })
   describe('no endpoint "GET /leaderboard"', () => {
-    it.only('deverá retornar array com todos os times e seus dados', async () => {
+    it('deverá retornar array com todos os times e seus dados', async () => {
       sinon.stub(Team, 'findAll').resolves(teamsMock as Team[])
       sinon.stub(MatchModel, 'findAll').resolves(matchMock as MatchModel[])
      

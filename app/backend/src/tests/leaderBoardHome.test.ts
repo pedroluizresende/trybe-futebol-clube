@@ -12,7 +12,7 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('testa a rota "/leaderboard/home"', () => {
+describe('testa a rota "/leaderboard"', () => {
   describe('no endpoint "GET /leaderboard/home"', () => {
     it('deverá retornar array com todos os times e seus dados', async () => {
       sinon.stub(Team, 'findAll').resolves(teamsMock as Team[])
@@ -20,6 +20,21 @@ describe('testa a rota "/leaderboard/home"', () => {
      
       const response = await chai.request(app)
       .get('/leaderBoard/home')
+
+      expect(response.status).to.be.equal(200)
+      expect(response.body).to.be.deep.equal(leaderBoardMock)
+    })
+    afterEach(() => {
+      sinon.restore()
+    })
+  })
+  describe('no endpoint "GET /leaderboard/away"', () => {
+    it('deverá retornar array com todos os times e seus dados', async () => {
+      sinon.stub(Team, 'findAll').resolves(teamsMock as Team[])
+      sinon.stub(MatchModel, 'findAll').resolves(matchMock as MatchModel[])
+     
+      const response = await chai.request(app)
+      .get('/leaderBoard/away')
 
       expect(response.status).to.be.equal(200)
       expect(response.body).to.be.deep.equal(leaderBoardMock)
